@@ -1,3 +1,12 @@
+:root {
+    --colorTurquesa: #41EAD4;
+    --colorBlanco: #FDFFFC;
+    --colorNaranja: #FE7F2D;
+    --colorAzul: #011627;
+    --colorGris: #383E48;
+    --colorGrisOscuro: #272B32;
+}
+
 .body__login {
     background-color: var(--colorAzul);
     display: flex;
@@ -201,7 +210,7 @@
 
 @media (min-width:1024px) {
     .login-container {
-        margin: 6em 0;
+        margin: 3.7em 0;
     }
 
     .topBox img {
