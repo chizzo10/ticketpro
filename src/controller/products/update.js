@@ -1,20 +1,24 @@
+const fs = require('fs');
 const { readJSON, writeJSON } = require("../../data");
 
+
+
 module.exports = (req,res) => {
-    const {name, price, category, discount, description, section, address, date, image, serviceCharge} = req.body;
+    const {name, price, category, description, section, address, date, image, serviceCharge, location} = req.body;
     const products = readJSON('products.json');
 
     const productsModify = products.map(product => {
-        if(product.id === req.params.id){
-            product.name = name.trim()
-            product.description = description.trim()
+        if(product.id === +req.params.id){
+            req.file &&(fs.existsSync(`./public/images/products${product.image}`) && fs.unlinkSync(`./public/images/products/${product.image}`))
+            product.name = name
+            product.description = description
             product.price = +price
-            product.discount = +discount
             product.category = category
             product.section = section
             product.address = address
             product.date = date
-            product.image = image
+            product.location = location;
+            product.image = req.file ? req.file.filename : product.image;
             product.serviceCharge = serviceCharge
         }
 
@@ -23,5 +27,5 @@ module.exports = (req,res) => {
 
     writeJSON(productsModify, 'products.json')
 
-    return res.redirect('/')
+    return res.redirect('/products/productList')
 }
