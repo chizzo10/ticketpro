@@ -1,9 +1,19 @@
 const Product = require('../../data/Product');
 const { readJSON, writeJSON } = require('../../data');
-const upload = require('../../middlewares/upload');
+const { validationResult } = require("express-validator");
+
 
 module.exports = async (req, res) => {
-    try {
+    const errors = validationResult(req);
+    const categories = readJSON('categories.json');
+    const sections = readJSON('sections.json');
+    if(!errors.isEmpty()) {
+        res.render("addProduct", {
+            categories,
+            sections,
+            errors: errors.mapped(),
+            old:req.body });
+    }else{
         const products = readJSON('products.json');
         
         const newProductData = {
@@ -24,9 +34,6 @@ module.exports = async (req, res) => {
         products.push(newProduct);
         writeJSON(products, 'products.json');
         
-        return res.redirect('/products/productList');
-    } catch (error) {
-        console.error('Error en la creación del producto:', error);
-        return res.status(500).send('Error en la creación del producto.');
+        return res.redirect('/products/productList') ;
     }
-};
+}
